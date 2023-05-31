@@ -80,7 +80,12 @@
 				}
 			})
 		})
-		
+		$('#frm').submit(function(e){
+			const file=$('#filename')[0]
+			let formData=new FormData();
+			formData.append('filename',file);
+			alert(JSON.stringify(formData))
+		})
 	})//$() end------------------------
 	
 	
@@ -92,6 +97,12 @@
 	<button id="bt1" class="btn btn-outline-success">ajax(VO)</button>
 	<button id="bt2" class="btn btn-outline-danger">ajax(List)</button>
 	<button id="bt3" class="btn btn-outline-primary">ajaxRest(JSON파라미터전달==>VO로 받기)</button>
+	<hr>
+	<form id="frm">
+		올린이<input type="name"><br>
+		첨부파일:<input type="file" name="filename" id="filename"><br>
+		<button>업로드</button>
+	</form>
 	<hr>
 	<div id="resultView"></div>
 </div>

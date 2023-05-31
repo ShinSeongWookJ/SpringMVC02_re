@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <style>
 .footer{
-	position:fixed;
+	/* position:fixed; */
 	width:100%;
 	left:0;
 	bottom:0;
