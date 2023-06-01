@@ -63,14 +63,28 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserVO findUser(UserVO findUser) throws NotUserException {
-		// TODO Auto-generated method stub
-		return null;
+		UserVO user=userDao.findUser(findUser);
+		if(user==null) {
+			throw new NotUserException("존재하지 않는 아이디에요");
+		}
+		return user;
 	}
+	
 
 	@Override
 	public UserVO loginCheck(String userid, String pwd) throws NotUserException {
-		// TODO Auto-generated method stub
-		return null;
+		UserVO tmpVo=new UserVO();
+		tmpVo.setUserid(userid);
+		
+		UserVO user=this.findUser(tmpVo);
+		if(user==null) {
+			throw new NotUserException("존재하지 않는 아이디에요");
+		}
+		if(!user.getPwd().equals(pwd)) {
+			throw new NotUserException("비밀번호가 일치하지 않아요");
+		}
+		
+		return user;
 	}
 
 }

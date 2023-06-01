@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt"  uri="http://java.sun.com/jsp/jstl/fmt"%>
-<c:import url="/top"/>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<c:import url="/top" />
 
 <script>
 	$(function(){
@@ -80,11 +80,69 @@
 				}
 			})
 		})
+		/*
+		 const imageInput = $("#imageInput")[0];
+  // 파일을 여러개 선택할 수 있으므로 files 라는 객체에 담긴다.
+  console.log("imageInput: ", imageInput.files)
+
+ 	/*
+				processData는 데이터를 일반적인 쿼리스트링으로 변환할 것인지를 결정함
+				processData의 기본값은 true. 이는 기본값으로 
+				'application/x-www-form-urlencode'타입으로 전송함.
+				다른 타입으로 보내기 위해서는 false를 지정
+				contentType:false,
+				/*contentType의 기본값 역시 'application/x-www-form-urlencode'이므로
+				multipart/form-data로 보내려면 false를 지정해야 함
+  				const formData = new FormData();
+  				formData.append("image", imageInput.files[0]);
+
+		*/
 		$('#frm').submit(function(e){
+			e.preventDefault();
 			const file=$('#filename')[0]
+			//console.dir(file)
+			if(file.files.length==0){
+				alert('파일을 선택하세요')
+				return;
+			}
 			let formData=new FormData();
-			formData.append('filename',file);
-			alert(JSON.stringify(formData))
+			console.log(">>>"+file.files[0].name)
+			formData.append('filename',file.files[0]);
+			formData.append('name',$('#name').val())
+			formData.append('msg',$('#msg').val())
+			//alert(JSON.stringify(formData))
+			let url='ajaxFile';
+			$.ajax({
+				type:'post',
+				url:url,
+				data:formData,
+				contentType:false,//기본
+				processData:false,//
+				success:function(res){
+					alert(res.result);
+				},
+				error:function(err){
+					alert('err')
+				}
+			})
+		})
+		
+		$('#frm2').submit(function(e){
+			e.preventDefault();
+			let jsondata={
+					name:'aaa',
+					msg:'bbb'
+			}
+			$.ajax({
+                url:'ajaxPut',
+                type:'put',                    
+                data:JSON.stringify(jsondata),
+                contentType:'application/json;charset=UTF-8',
+                success:function(data){
+                 alert(data.result)           
+                 }            
+
+            }); 
 		})
 	})//$() end------------------------
 	
@@ -92,18 +150,27 @@
 	
 </script>
 
-<div class="container mt-3" style="height:600px;overflow: auto;">
+<div class="container mt-3" style="height: 600px; overflow: auto;">
 	<h1 class="text-center">Ajax Test Page</h1>
 	<button id="bt1" class="btn btn-outline-success">ajax(VO)</button>
 	<button id="bt2" class="btn btn-outline-danger">ajax(List)</button>
-	<button id="bt3" class="btn btn-outline-primary">ajaxRest(JSON파라미터전달==>VO로 받기)</button>
+	<button id="bt3" class="btn btn-outline-primary">ajaxRest(JSON파라미터전달==>VO로
+		받기)</button>
 	<hr>
-	<form id="frm">
-		올린이<input type="name"><br>
-		첨부파일:<input type="file" name="filename" id="filename"><br>
+	<form id="frm" method='post' enctype="multipart/form-data">
+		올린이<input type="text" name="name" id="name"><br> 
+		올린이<input type="text" name="msg" id="msg"><br>
+		첨부파일:<input type="file"
+			name="filename" id="filename"><br>
 		<button>업로드</button>
 	</form>
+	
 	<hr>
+	<form id="frm2" method='post' enctype="multipart/form-data">
+		올린이<input type="text" name="name2" id="name"><br> 
+		올린이<input type="text" name="msg2" id="msg"><br>		
+		<button>업로드</button>
+	</form>
 	<div id="resultView"></div>
 </div>
 <c:import url="/foot" />

@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 /* Rest : Representational State Transfer의 약자
@@ -115,7 +117,12 @@ public class AjaxRestController {
 		map.put("memo2", new MemoVO(222,"이순신","나를 따르라~~",null));
 		return map;
 	}
-	
+	@PutMapping(value="/ajaxPut", produces="application/json")
+	public ModelMap update(@RequestBody MemoVO memo) {
+		log.info("memo=="+memo);
+		ModelMap map=new ModelMap("result", "OK");
+		return map;
+	}
 	
 
 }

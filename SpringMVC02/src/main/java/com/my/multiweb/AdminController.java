@@ -52,7 +52,7 @@ public class AdminController {
 	@PostMapping("/prodInsert")
 	public String productRegister(Model m,
 			@RequestParam("pimage")List<MultipartFile> pimage,
-			@ModelAttribute("product") ProductVO product,
+			@ModelAttribute("product") ProductVO product, //pimage1,pimage2,pimage3
 			HttpServletRequest req) {		
 		log.info("product===="+product);
 		//1. 업로드 디렉토리 절대경로 얻기

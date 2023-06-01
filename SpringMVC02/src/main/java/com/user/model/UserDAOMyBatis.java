@@ -44,8 +44,8 @@ public class UserDAOMyBatis implements UserDAO {
 
 	@Override
 	public UserVO findUser(UserVO findUser) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return session.selectOne(NS+".selectUserByUserid", findUser.getUserid());
 	}
 
 	@Override
