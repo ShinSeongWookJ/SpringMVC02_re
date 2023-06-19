@@ -107,8 +107,24 @@
 
             </table>
          </div>
+      </div><!--.row end  -->
+      <!-- 리뷰 글쓰기 폼 -------------------------------------------- -->
+      <div class="row mt-4">
+      	<div class="col-md-10 offset-md-1">
+      		<c:import url="/reviewForm"/>
+      	</div>
+      </div>      
+      <!-- 리뷰 목록 ------------------------------------------------ -->
+      <div class="row">
+      	<div class="col-md-12" id="reviewList">
+      	
+      	</div>
       </div>
-	</div>
+      <!-- 리뷰 수정 모달------------------------------------------- -->
+      <%@ include file="/WEB-INF/views/review/reviewEdit.jsp" %>
+      <!-- ------------------------------------------------------- -->
+      
+	</div><!-- .container end -->
 
 
 <c:import url="/foot" />

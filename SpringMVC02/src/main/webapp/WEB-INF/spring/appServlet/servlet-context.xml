@@ -42,6 +42,9 @@
 		<beans:constructor-arg value="C:/myjava/Upload"/>
 	</beans:bean>
 	<!-- String upDir=new String("C:/myjava/Upload"); -->
+	<!-- 상품평을 쓰는 리뷰폼 매핑 ==================================== -->
+	<view-controller path="/reviewForm" view-name="review/reviewForm"/>
+	
 </beans:beans>
 
 

@@ -1,12 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!-- Ajax 요청 처리------------------- -->
-<script src="js/reviewAjax.js"></script>    
-<!-- --------------------------------- -->    
-<form method="post" enctype="multipart/form-data" name="rf" id="rf">
+<!-- --------------------------------- -->  
+<div class='modal' id='reviewModal'>
+	<div class='modal-content'>
+		<div class='modal-body'>  
+<form method="post" enctype="multipart/form-data" name="rf2" id="rf2">
 	<!-- hidden data------------------------------------ -->
 		<input type="text" name="pnum_fk" id="pnum_fk" value="${prod.pnum}">
 		<input type="text" name="userid" id="userid" value="${loginUser.userid}">
+		<input type="text" name="num" id="num">
 	<!-- ---------------------------------------------- -->
 	<table class="table">
 	<tr>
@@ -54,3 +56,7 @@
 	</tr>
 </table>
 </form>
+
+		</div>
+	</div>
+</div>

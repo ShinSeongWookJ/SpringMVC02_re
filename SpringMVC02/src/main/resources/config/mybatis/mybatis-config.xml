@@ -10,6 +10,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<typeAlias type="com.shop.model.CategoryVO" alias="Category"/>
 		<typeAlias type="com.shop.model.ProductVO" alias="Product"/>
 		<typeAlias type="com.shop.model.CartVO" alias="Cart"/>
+		<typeAlias type="com.shop.model.ReviewVO" alias="Review"/>
 	</typeAliases>
 	<!-- mapper 정의 ========================================= -->
 	<mappers>
@@ -18,5 +19,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="config/mybatis/mapper/CategoryMapper.xml"/>
 		<mapper resource="config/mybatis/mapper/ProductMapper.xml"/>
 		<mapper resource="config/mybatis/mapper/CartMapper.xml"/>
+		<mapper resource="config/mybatis/mapper/ReviewMapper.xml"/>
 	</mappers>
 </configuration>

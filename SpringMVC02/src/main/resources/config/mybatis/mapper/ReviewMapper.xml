@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.mapper.ReviewMapper">
+	<insert id="addReview" parameterType="Review">
+		<selectKey keyProperty="num" resultType="_int" order="BEFORE">
+			select review_seq.nextval from dual
+		</selectKey>
+		insert into review(num,userid,content,score,filename,wdate,pnum_fk)
+		values(#{num},#{userid},#{content:VARCHAR},#{score},
+		#{filename:VARCHAR},SYSDATE,#{pnum_fk}) 
+	</insert>
+	
+	<select id="listReview" resultType="Review" parameterType="_int">
+		select * from review where pnum_fk=#{value} order by num desc
+	</select>
+	
+	<delete id="deleteReview" parameterType="_int">
+		delete from review where num=#{value}
+	</delete>
+	
+	<select id="getReview" resultType="Review" parameterType="_int">
+		select * from review where num=#{value}
+	</select>
+	
+</mapper>
