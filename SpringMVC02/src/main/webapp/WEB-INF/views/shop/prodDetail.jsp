@@ -113,6 +113,11 @@
       	<div class="col-md-10 offset-md-1">
       		<c:import url="/reviewForm"/>
       	</div>
+      </div>
+      <div class="row">
+      	<div class="col-md-12" id="reviewTitle">
+      		<h4>Review List <span class="badge badge-success" id='review_cnt'>7</span> </h4>
+      	</div>
       </div>      
       <!-- 리뷰 목록 ------------------------------------------------ -->
       <div class="row">
@@ -120,11 +125,16 @@
       	
       	</div>
       </div>
+	  <div class="row">
+	  	<div class="col-md-10 offset-md-1">      
       <!-- 리뷰 수정 모달------------------------------------------- -->
       <%@ include file="/WEB-INF/views/review/reviewEdit.jsp" %>
       <!-- ------------------------------------------------------- -->
-      
+     	 </div>
+      </div>
 	</div><!-- .container end -->
 
 
 <c:import url="/foot" />
+
+

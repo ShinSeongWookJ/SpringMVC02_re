@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +37,25 @@ import lombok.extern.log4j.Log4j;
  * put/delete방식일경우 404에러 발생하는 경우가 많다==>이런 경우 /WEB-INF/web.xml에 가서
  * filter를 등록하자. HiddenHttpMethodFilter, HttpPutFormContentFilter 등록하자.
  * ========web.xml======================================
+ * <!-- Restful method======================================== -->
+	<filter>
+        <filter-name>hiddenHttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>hiddenHttpMethodFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>HttpPutFormContentFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>HttpPutFormContentFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
  * ======================================================
  * */
 @RestController
@@ -53,8 +74,17 @@ public class ReviewController {
 		return arr;
 	}
 	
+	@GetMapping(value="/reviewCnt", produces="application/json")
+	public ModelMap getReviewCount(HttpSession ses) {
+		Integer pnum=(Integer) ses.getAttribute("pnum");
+		int count=this.reviewService.getReviewCount(pnum);
+		ModelMap map=new ModelMap();
+		map.put("count", count);
+		return map;
+	}
+	
 	@PostMapping(value="/user/reviews", produces = "application/xml")
-	public ModelMap reviewInsert(@RequestParam("mfilename") MultipartFile mf,  @ModelAttribute("rvo") ReviewVO rvo, HttpSession ses) {
+	public ModelMap reviewInsert(@RequestParam(value="mfilename",required = false) MultipartFile mf,  @ModelAttribute("rvo") ReviewVO rvo, HttpSession ses) {
 		log.info("Post rvo==="+rvo);
 		
 		ServletContext app=ses.getServletContext();
@@ -81,7 +111,7 @@ public class ReviewController {
 		map.addAttribute("result",n);
 		return map;
 	}//-------------------------
-	
+	//글 삭제 처리
 	@DeleteMapping(value="/user/reviews/{num}", produces = "application/json")
 	public ModelMap reviewDelete(@PathVariable("num") int num) {
 		log.info("DELETE num==="+num);
@@ -90,14 +120,36 @@ public class ReviewController {
 		map.addAttribute("result",n);
 		return map;
 	}//----------------------------------
-	
-	@GetMapping(value="/reviews/{num}", produces = "application/json")
+	//특정 글 조회
+	@GetMapping(value="/user/reviews/{num}", produces = "application/json")
 	public ReviewVO getReview(@PathVariable("num") int num) {
 		ReviewVO rvo=this.reviewService.getReview(num);
 		return rvo;
 	}
+	//json데이터를 파라미터로 보내면 이것을 MemoVO로 받아 Map유형(=>json)으로 반환 처리 => 스프링은 자동으로 Converting한다
+	//?name=aaa&idx=100 ==> VO객체로 받으려면 ==> @ModelAttribute를 붙인다.
+	//json형태의 파라미터 데이터는 => VO객체로 받으려면 =>@RequestBody를 붙인다.
+	//글 수정 처리
+	@PutMapping(value="/user/reviews/{num}", produces="application/json")
+	public ModelMap reviewUpdate(@PathVariable("num") int num, @RequestBody ReviewVO rvo) {
+		log.info("PUT rvo==="+rvo);
+		
+		int n=this.reviewService.updateReview(rvo);
+		
+		ModelMap map=new ModelMap();
+		map.put("result", n);
+		return map;
+	}
 
 }
+
+
+
+
+
+
+
+
 
 
 

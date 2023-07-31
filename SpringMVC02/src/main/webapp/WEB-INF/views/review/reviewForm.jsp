@@ -1,12 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!-- Ajax 요청 처리------------------- -->
-<script src="js/reviewAjax.js"></script>    
+<!-- <script src="js/reviewAjax.js"></script>    -->
+<script>
+
+<%@ include file="/js/reviewAjax.js" %>
+
+</script> 
 <!-- --------------------------------- -->    
 <form method="post" enctype="multipart/form-data" name="rf" id="rf">
 	<!-- hidden data------------------------------------ -->
-		<input type="text" name="pnum_fk" id="pnum_fk" value="${prod.pnum}">
-		<input type="text" name="userid" id="userid" value="${loginUser.userid}">
+		<input type="hidden" name="pnum_fk" id="pnum_fk" value="${prod.pnum}">
+		<input type="hidden" name="userid" id="userid" value="${loginUser.userid}">		
 	<!-- ---------------------------------------------- -->
 	<table class="table">
 	<tr>
@@ -39,7 +44,7 @@
 	<tr>
 		<th>이미지업로드</th>
 		<td colspan="2">
-		<input type="file" name="mfilename" id="mfilename"
+		<input type="file" name="mfilename" id="mfilename" 
 		 accept="image/*" class="form-control">
 		</td>
 		<td>
