@@ -2,11 +2,9 @@
     pageEncoding="UTF-8"%>
 <!-- Ajax 요청 처리------------------- -->
 <!-- <script src="js/reviewAjax.js"></script>    -->
-<script>
 
-<%@ include file="/js/reviewAjax.js" %>
-
-</script> 
+<%@ include file="/WEB-INF/views/review/reviewScript.jsp" %>  
+ 
 <!-- --------------------------------- -->    
 <form method="post" enctype="multipart/form-data" name="rf" id="rf">
 	<!-- hidden data------------------------------------ -->

@@ -72,7 +72,7 @@
         <a class="nav-link" href="${myctx}/user/cartList">Cart</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="${myctx}/user/board/write">Board Form</a>
+        <a class="nav-link" href="${myctx}/board/write">Board Form</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="${myctx}/board/list">Board List</a>
