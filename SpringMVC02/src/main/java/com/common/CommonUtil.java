@@ -10,7 +10,8 @@ public class CommonUtil {
 		m.addAttribute("message",msg);
 		m.addAttribute("loc",loc);
 		return "msg";
-	}
+	} 
+	
 	public String addMsgBack(Model m, String msg) {
 		m.addAttribute("message",msg);
 		m.addAttribute("loc","javascript:history.back()");

@@ -13,5 +13,16 @@
 		#{filename:VARCHAR},#{originFilename:VARCHAR},#{filesize:NUMERIC},#{num},#{lev},#{sunbun})	
 	</insert>
 	
+	<select id="selectBoardAll" resultType="Board" parameterType="map">
+		select * from spring_board order by num desc
+	</select>
+	
+	<update id="updateReadnum" parameterType="int">
+		update spring_board set readnum=readnum+1 where num=#{value}
+	</update>
+	
+	<select id="selectBoardByIdx" resultType="Board" parameterType="_int">
+		select * from spring_board where num=#{value}
+	</select>
 	
 </mapper>
