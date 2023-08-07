@@ -66,7 +66,19 @@ public class BoardController {
 			String filename=uuid.toString()+"_"+originFname;//물리적파일명=>실제 업로드시킬 파일명
 			log.info("filename==="+filename);
 			
-			//3) 업로드 처리
+			//3_1) mode가 edit(수정)이고 예전에 첨부했던 파일이 있다면
+			//예전 파일 삭제 처리
+			if(board.getMode().equals("edit")&& board.getOld_filename()!=null) {
+				//수정 모드라면 예전에 업로드했던 파일은 삭제 처리
+				File delF=new File(upDir, board.getOld_filename());
+				if(delF.exists()) {
+					boolean b=delF.delete();
+					log.info("old file삭제여부: "+b);
+				}
+				
+			}
+			
+			//3_2) 업로드 처리
 			try {
 				mfilename.transferTo(new File(upDir, filename));
 				log.info("upDir==="+upDir);
@@ -92,13 +104,16 @@ public class BoardController {
 		String str="",loc="";
 		if("write".equals(board.getMode())) {//글쓰기 모드라면
 			
-			n=this.boardService.insertBoard(board);
+			n=this.boardService.insertBoard(board);//글쓰기 처리 메서드 호출
 			str="글쓰기 ";
 			
 		}else if("rewrite".equals(board.getMode())) {//답변 글쓰기 모드라면
-			
+			n=this.boardService.rewriteBoard(board);
+			str="답변 글쓰기 ";		
 		}else if("edit".equals(board.getMode())) {//글 수정이라면
 			
+			n=this.boardService.updateBoard(board);//글 수정 처리 메서드 호출
+			str="글수정 ";
 		}
 		str+=(n>0)?"성공":"실패";
 		loc=(n>0)?"list":"javascript:history.back()";
@@ -129,8 +144,83 @@ public class BoardController {
 		m.addAttribute("board",board);
 		
 		return "board/boardView";
-	}
+	}//-------------------------------
 	
+	@PostMapping("/delete")
+	public String boardDelete(Model m, 
+			HttpServletRequest req,
+			@RequestParam(defaultValue = "0") int num,
+			@RequestParam(defaultValue = "") String passwd) {
+		log.info("num=="+num+", passwd=="+passwd);
+		if(num==0||passwd.isEmpty()) {
+			return "redirect:list";
+		}
+		//해당 글을 db에서 가져오기
+		BoardVO vo=this.boardService.selectBoardByIdx(num);
+		if(vo==null) {
+			return util.addMsgBack(m, "해당 글은 존재하지 않아요");
+		}
+		//비밀번호 일치여부 체크해서 일치하면 삭제 처리
+		String dbPwd=vo.getPasswd();
+		if(!dbPwd.equals(passwd)) {
+			return util.addMsgBack(m, "비밀번호가 일치하지 않아요");
+		}
+		//db에서 글 삭제처리
+		int n=this.boardService.deleteBoard(num);
+		
+		ServletContext app=req.getServletContext();
+		String upDir=app.getRealPath("/resources/board_upload");
+		log.info("upDir===="+upDir);
+		
+		//서버에 업로드한 첨부파일이 있다면 서버에서 삭제 처리
+		if(n>0 && vo.getFilename()!=null) {
+			File f=new File(upDir, vo.getFilename());
+			if(f.exists()) {
+				boolean b=f.delete();
+				log.info("파일삭제 여부: "+b);
+			}
+		}
+		String str=(n>0)?"글 삭제 성공":"삭제 실패";
+		String loc=(n>0)?"list":"javascript:history.back()";
+		
+		return util.addMsgLoc(m, str, loc);
+	}//-------------------------------
+	
+	@PostMapping("/edit")
+	public String boardEditform(Model m,
+			@RequestParam(defaultValue = "0") int num,
+			@RequestParam(defaultValue = "") String passwd) {
+		//1. 글번호,비번 유효성 체크 ==> list redirect이동
+		if(num==0||passwd.isEmpty()) {
+			return "redirect:list";
+		}
+		
+		//2. 글번호로 해당 글 내용 가져오기
+		//   없으면 "없는 글입니다"
+		BoardVO vo=this.boardService.selectBoardByIdx(num);
+		if(vo==null) {
+			return util.addMsgBack(m, "해당 글은 없어요");
+		}
+		
+		//3. 비번 체크-> 일치하지 않으면 "불일치" back이동
+		if(!vo.getPasswd().equals(passwd)) {
+			return util.addMsgBack(m, "비밀번호가 일치하지 않아요");
+		}
+		
+		//4. Model에 해당 글 저장 "board"
+		m.addAttribute("board",vo);
+		
+		return "board/boardEdit";
+		//boardWrite.jsp를 save as해서 만들기
+	}//-------------------------------
+	
+	@PostMapping("/rewrite")
+	public String boardRewrite(Model m, @ModelAttribute BoardVO vo) {
+		log.info("vo==="+vo);
+		m.addAttribute("num", vo.getNum());//부모글의 글번호
+		m.addAttribute("subject",vo.getSubject());//부모글의 제목
+		return "board/boardRewrite";
+	}
 
 }//////////////////////////////////
 

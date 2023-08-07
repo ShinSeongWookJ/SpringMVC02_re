@@ -76,8 +76,10 @@
             </tr>
             <tr>
                <td colspan="4" align=center><a href="../write">글쓰기</a>| <a
-                  href="../list">목록</a>| <a href="#" onclick="go(1)">편집</a>| <a
-                  href="#" onclick="go(2)">삭제</a>| <a href="javascript:goRe()">답변</a></td>
+                  href="../list">목록</a>| 
+                  <a href="#" onclick="go(1)">편집</a>| <a
+                  href="#" onclick="go(2)">삭제</a>| 
+                  <a href="javascript:goRe()">답변</a></td>
             </tr>
          </table>
 	</c:if>
@@ -86,13 +88,55 @@
 		<input type="hidden" name="fname" value="<c:out value="${board.filename}"/>">
 		<input type="hidden" name="origin_fname" value="<c:out value="${board.originFilename}"/>">
 	</form>	
-	<!--  ------------------------------------------------------- -->
+	<!--  편집 또는 삭제를 위한 form------------------------------------ -->
+	<form name="frm" id="frm">
+		<input type="hidden" name="num" value="<c:out value="${board.num}"/>">
+		<input type="hidden" name="mode">
+		<div class="row mt-4" id="divPasswd" style="display:none">
+			<div class="col-md-3 offset-md-1 text-right mr-2">
+				<label for="passwd">글 비밀번호</label>
+			</div>
+			<div class="col-md-4">
+				<input type="password" name="passwd" id="passwd"
+				 class="form-control" placeholder="Password" required>
+			</div>
+			<div class="col-md-3">
+				<button id="btn" class="btn btn-outline-primary"></button>
+			</div>
+		</div>	
+	</form>
+	<!-- ---답변달기 form시작------------------------------------------------ -->
+	<form name="reF" id="reF" action="../rewrite" method="post">
+		<!-- hidden으로 부모글의 글번호(num)와 제목(subject)를 넘기자 -->
+		<input type="hidden" name="num" value="<c:out value="${board.num}"/>">
+		<input type="hidden" name="subject" value="<c:out value="${board.subject}"/>">
+	</form>
 </div>
-
 <script>
+	//답변글쓰기로 가기
+	function goRe(){
+		reF.submit();
+	}
+
 	//파일 다운로드 처리
 	function down(){
 		fileF.submit();		
+	}
+	function go(flag){
+		if(flag==1){
+			frm.mode.value='edit';
+			$('#btn').text('글수정');
+			$('#passwd').focus();
+			frm.action='../edit';
+			frm.method='post';
+		}else if(flag==2){
+			frm.mode.value='delete';
+			$('#btn').text('글삭제');
+			$('#passwd').focus();
+			frm.action='../delete';
+			frm.method='post';
+		}
+		$('#divPasswd').show(1000);
 	}
 </script>
 

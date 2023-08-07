@@ -48,15 +48,23 @@
 					<c:out value="${board.num}"/>
 				</td>
 				<td>
+					<!-- 답변레벨에 따라 들여쓰기 하자 -->
+					<c:forEach var="k" begin="1" end="${board.lev}">
+						&nbsp;&nbsp;&nbsp;
+					</c:forEach>
+					<c:if test="${board.lev>0}">
+						<img src="../images/re.png">
+					</c:if>
+					<!-- 글제목 ---------------- -->
 					<a href="view/<c:out value="${board.num}"/>">
-					<c:if test="${fn:length(board.subject)>20}">
-						<c:out value="${fn:substring(board.subject,0,20)}"/> ...
-					</c:if>
-					<c:if test="${fn:length(board.subject)<=20}">
-						<c:out value="${board.subject}"/>
-					</c:if>
-					
+						<c:if test="${fn:length(board.subject)>20}">
+							<c:out value="${fn:substring(board.subject,0,20)}"/> ...
+						</c:if>
+						<c:if test="${fn:length(board.subject)<=20}">
+							<c:out value="${board.subject}"/>
+						</c:if>
 					</a>
+					<!-- 첨부파일썸네일 -->
 					<c:if test="${board.filesize>0}">
 						<span class="float-right">
 						<img src="../images/attach.jpg"  style='width:26px'  
