@@ -13,9 +13,34 @@
 		#{filename:VARCHAR},#{originFilename:VARCHAR},#{filesize:NUMERIC},#{num},#{lev},#{sunbun})	
 	</insert>
 	
+	<select id="getTotalCount" resultType="int" parameterType="Paging">
+		select count(num) from spring_board
+	</select>
+	<select id="selectBoardAllPaging" resultType="Board" parameterType="Paging">
+		select * from(
+		 select row_number() over(order by refer desc, sunbun asc) rn, spring_board.*
+		 from spring_board
+		 )
+		 <![CDATA[
+		 where rn > #{start} and rn < #{end}
+		 ]]>
+	</select>
+	
 	<select id="selectBoardAll" resultType="Board" parameterType="map">
 		<!-- select * from spring_board order by num desc  [단순형 게시판]-->
-		select * from spring_board order by refer desc, sunbun asc
+		<!-- select * from spring_board order by refer desc, sunbun asc [답변형 게시판]-->
+		select * from(
+		 select row_number() over(order by refer desc, sunbun asc) rn, spring_board.*
+		 from spring_board
+		 )
+		 <![CDATA[
+		 where rn > #{start} and rn < #{end}
+		 ]]>
+		 <!-- 부등호 등의 문자가 나올때는 CDATA Section으로 감싸자. CDATA는 Character Data라는
+		 의미. CDATA로 감싸진 부분은 xml문서로 파싱하지 않고 문자로 취급한다 -->
+		 <!-- where rn &gt; #{start} and rn &lt; #{end} -->
+		 <!-- where rn between #{start} and #{end} -->
+		 
 	</select>
 	
 	<update id="updateReadnum" parameterType="int">
